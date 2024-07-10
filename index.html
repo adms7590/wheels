@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Accessories</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Auto Accessories</h1>
+        <nav>
+            <ul>
+                <li><a href="#cauchos">Cauchos</a></li>
+                <li><a href="#aceites-lubricantes">Aceites y Lubricantes</a></li>
+                <li><a href="#audio">Audio</a></li>
+                <li><a href="#iluminacion">Iluminación</a></li>
+                <li><a href="#suspension">Suspensión</a></li>
+                <li><a href="#frenos-pastillas">Frenos y Pastillas de Freno</a></li>
+                <li><a href="#aromatizantes">Aromatizantes</a></li>
+                <li><a href="#alfombras">Alfombras</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#amortiguadores">Amortiguadores</a></li>
+                <li><a href="#consumibles">Consumibles</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="cauchos">
+            <h2>Cauchos</h2>
+            <table id="cauchosTable">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Medida</th>
+                        <th>Modelo</th>
+                        <th>Disponible</th>
+                        <th>Precio en Dólares</th>
+                        <th>Precio Cashea</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td contenteditable="true"></td>
+                        <td contenteditable="true"></td>
+                        <td contenteditable="true"></td>
+                        <td contenteditable="true"></td>
+                        <td contenteditable="true"></td>
+                        <td contenteditable="true"></td>
+                        <td><button onclick="deleteRow(this)">Eliminar</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button onclick="addRow()">Añadir Fila</button>
+        </section>
+
+        <section id="aceites-lubricantes">
+            <h2>Aceites y Lubricantes</h2>
+            <form>
+                <!-- Formulario para Aceites y Lubricantes -->
+            </form>
+        </section>
+
+        <section id="audio">
+            <h2>Audio</h2>
+            <form>
+                <!-- Formulario para Audio -->
+            </form>
+        </section>
+
+        <section id="iluminacion">
+            <h2>Iluminación</h2>
+            <form>
+                <!-- Formulario para Iluminación -->
+            </form>
+        </section>
+
+        <section id="suspension">
+            <h2>Suspensión</h2>
+            <form>
+                <!-- Formulario para Suspensión -->
+            </form>
+        </section>
+
+        <section id="frenos-pastillas">
+            <h2>Frenos y Pastillas de Freno</h2>
+            <form>
+                <!-- Formulario para Frenos y Pastillas de Freno -->
+            </form>
+        </section>
+
+        <section id="aromatizantes">
+            <h2>Aromatizantes</h2>
+            <form>
+                <!-- Formulario para Aromatizantes -->
+            </form>
+        </section>
+
+        <section id="alfombras">
+            <h2>Alfombras</h2>
+            <form>
+                <!-- Formulario para Alfombras -->
+            </form>
+        </section>
+
+        <section id="servicios">
+            <h2>Servicios</h2>
+            <form>
+                <!-- Formulario para Servicios -->
+            </form>
+        </section>
+
+        <section id="amortiguadores">
+            <h2>Amortiguadores</h2>
+            <form>
+                <!-- Formulario para Amortiguadores -->
+            </form>
+        </section>
+
+        <section id="consumibles">
+            <h2>Consumibles</h2>
+            <form>
+                <!-- Formulario para Consumibles -->
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Auto Accessories</p>
+    </footer>
+
+    <script>
+        function addRow() {
+            const table = document.getElementById('cauchosTable').getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+            for (let i = 0; i < 6; i++) {
+                const newCell = newRow.insertCell(i);
+                newCell.contentEditable = "true";
+            }
+            const actionsCell = newRow.insertCell(6);
+            actionsCell.innerHTML = '<button onclick="deleteRow(this)">Eliminar</button>';
+        }
+
+        function deleteRow(button) {
+            const row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+    </script>
+</body>
+</html>
