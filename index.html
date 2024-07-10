@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auto Accessories</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://apis.google.com/js/api.js"></script>
 </head>
 <body>
     <header>
@@ -32,13 +33,7 @@
             <table id="cauchosTable">
                 <thead>
                     <tr>
-                        <th>Código</th>
-                        <th>Medida</th>
-                        <th>Modelo</th>
-                        <th>Disponible</th>
-                        <th>Precio en Dólares</th>
-                        <th>Precio Cashea</th>
-                        <th>Acciones</th>
+                        <th>Descripcion Completa</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -122,31 +117,38 @@
         <p>&copy; 2024 Auto Accessories</p>
     </footer>
 
-    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
-
-    <!-- Add Firebase products that you want to use -->
-    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
-
     <script>
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyC4gaZckrhP8r8OQzVF4AA8_0f9ZxzY76o",
-            authDomain: "wheels-9e6b5.firebaseapp.com",
-            projectId: "wheels-9e6b5",
-            storageBucket: "wheels-9e6b5.appspot.com",
-            messagingSenderId: "724052753282",
-            appId: "1:724052753282:web:addcccaaa1cd851f2b6d9b",
-            measurementId: "G-97CM8710ZZ"
-        };
+        let CLIENT_ID = '652384488943-ospm473q6imohjf8dlgamon1kgvn90rr.apps.googleusercontent.com';
+        let API_KEY = 'AIzaSyApiUSb8mAxwOlwtS3yb8H0BFL5ZzwhGus';
 
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const database = firebase.database(app);
+        let DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
+        let SCOPES = "https://www.googleapis.com/auth/spreadsheets";
 
-        document.addEventListener('DOMContentLoaded', (event) => {
-            loadTable();
-        });
+        function handleClientLoad() {
+            gapi.load('client:auth2', initClient);
+        }
+
+        function initClient() {
+            gapi.client.init({
+                apiKey: API_KEY,
+                clientId: CLIENT_ID,
+                discoveryDocs: DISCOVERY_DOCS,
+                scope: SCOPES
+            }).then(function () {
+                gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+                updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+            }, function(error) {
+                console.log(JSON.stringify(error, null, 2));
+            });
+        }
+
+        function updateSigninStatus(isSignedIn) {
+            if (isSignedIn) {
+                loadTable();
+            } else {
+                gapi.auth2.getAuthInstance().signIn();
+            }
+        }
 
         function addRow() {
             const table = document.getElementById('cauchosTable').getElementsByTagName('tbody')[0];
@@ -180,13 +182,25 @@
                 data.push(rowData);
             }
 
-            database.ref('cauchosTableData').set(data);
+            gapi.client.sheets.spreadsheets.values.update({
+                spreadsheetId: 'YOUR_SPREADSHEET_ID',
+                range: 'Cauchos!A2',
+                valueInputOption: 'RAW',
+                resource: {
+                    values: data
+                }
+            }).then((response) => {
+                console.log(response);
+            });
         }
 
         function loadTable() {
-            const table = document.getElementById('cauchosTable').getElementsByTagName('tbody')[0];
-            database.ref('cauchosTableData').once('value', (snapshot) => {
-                const data = snapshot.val() || [];
+            gapi.client.sheets.spreadsheets.values.get({
+                spreadsheetId: 'YOUR_SPREADSHEET_ID',
+                range: 'Cauchos!A2:F'
+            }).then((response) => {
+                const table = document.getElementById('cauchosTable').getElementsByTagName('tbody')[0];
+                const data = response.result.values || [];
 
                 for (let i = 0; i < data.length; i++) {
                     const newRow = table.insertRow();
@@ -202,6 +216,8 @@
         }
 
         document.getElementById('cauchosTable').addEventListener('input', saveTable);
+
+        handleClientLoad();
     </script>
 </body>
 </html>
